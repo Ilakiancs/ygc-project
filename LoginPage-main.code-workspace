@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "LoginPage-main",
+			"path": "..\\..\\Downloads\\LoginPage-main"
+		},
+		{
+			"name": "CyberDude-Training-Landing-Page-Web-design-master",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "CyberDude-Training-Landing-Page-Web-design-master"
+	}
+}

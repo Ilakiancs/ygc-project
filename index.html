@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Gas Booking</title>
+
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+
+    <link rel="shortcut icon" href="https://www.cyberdudenetworks.com/client-login/assets/images/favicon.png"
+        type="image/x-icon">
+
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700%7COpen+Sans&display=swap" />
+
+    <!-- Libraries -->
+    <link rel="stylesheet" href="">
+
+    <!-- Custom styling -->
+    <link rel="stylesheet" href="./assets/css/util.css">
+    <link rel="stylesheet" href="./assets/css/animation.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+2
+
+<body>
+
+    <div class="wrapper">
+
+        <!-- Header -->
+        <header>
+            <img class="logo" src="./assets/img/cdn-channel.png" width="140" alt="Logo" />
+            <nav>
+                <ul>
+                    <li><a href="login.html">Sign up / Login</a></li>
+                    <li><a href="about">Home</a></li>
+                    <li><a href="projects">About us</a></li>
+                </ul>
+            </nav>
+            <button> <i class="fa fa-envelope-o"></i></button>
+
+        </header>
+        <!-- End Header -->
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="hero-info m-50" style="flex-basis: 640px;">
+                <h1><span class="locale">GCylinder</span></h1>
+                <p> <a
+                        href="https://internet.org" target="_blank"></a>, now we can browse almost anything. But
+                    all educational materials are in English? Why not? provide quality education in native language for
+                    people who need it. </p>
+                <a class="btn btn-outline" href="https://www.youtube.com/user/CyberDudeNetworks" target="_blank"> <i
+                        class="fa fa-video-camera"></i> Learn now</a>
+
+
+            </div>
+
+            <img src="assets/img/undraw_researching_22gp.svg" alt="Learning">
+        </div>
+
+        <!-- End Main Content -->
+
+        <!-- Footer -->
+        <footer>
+
+        </footer>
+        <!-- End Footer -->
+    </div>
+    <script>
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7RKFOV4Mk_O2Nm9Vpv7sEAUc89iKHmeE",
+            authDomain: "gcylinder-d807a.firebaseapp.com",
+            projectId: "gcylinder-d807a",
+            storageBucket: "gcylinder-d807a.appspot.com",
+            messagingSenderId: "460628927682",
+            appId: "1:460628927682:web:a5bd53ffb382fd082c475b",
+            measurementId: "G-PDKWCKS2CF"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        db.collection("cities").doc("LA").set({
+            name: "Los Angeles",
+            state: "CA",
+            country: "USA"
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    </script>
+
+
+</body>
+
+</html>
