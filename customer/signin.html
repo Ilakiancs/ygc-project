@@ -201,7 +201,8 @@
                   phone: phone,
                 })
                 .then(function () {
-                  console.log("Signed Up");
+                  localStorage.setItem("username", username);
+                  location.replace("../order.html");
                 });
             });
         });

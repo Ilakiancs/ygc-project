@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/favicon.png" rel="icon" />
     <meta charset="UTF-8" />
     <title>Client Sign In</title>
 
@@ -26,7 +26,6 @@
   </head>
 
   <body>
-
     <div class="container contact-form">
       <div class="contact-image">
         <img
@@ -78,8 +77,11 @@
       }
 
       function showQR(title, ID) {
-          document.getElementById("form").innerHTML = "<h3>" + title + "</h3><div class=\"d-flex justify-content-center\" id=\"qrcode\"></div>";
-          new QRCode(document.getElementById("qrcode"), ID);
+        document.getElementById("form").innerHTML =
+          "<h3>" +
+          title +
+          '</h3><div class="d-flex justify-content-center" id="qrcode"></div>';
+        new QRCode(document.getElementById("qrcode"), ID);
       }
 
       document
@@ -92,12 +94,34 @@
             .get()
             .then((querySnapshot) => {
               const tempDoc = querySnapshot.docs.map((doc) => {
-                return { id: doc.id, sold: doc.data()["sold"], date: doc.data()["date"] };
+                return {
+                  id: doc.id,
+                  sold: doc.data()["sold"],
+                  date: doc.data()["date"],
+                };
               });
               if (tempDoc.length == 0) {
-                displayAlert("create");
+                orderDatabase
+                  .add({
+                    username: username,
+                    sold: false,
+                    date: date,
+                  })
+                  .then((doc) => {
+                    showQR(
+                      "Your order Placed on <br/>" +
+                        date +
+                        "<br/> <br/> Bring this Code to Nearest Retailer to get your Gas Cylinder",
+                      doc.id
+                    );
+                  });
               } else {
-                showQR("Your order Placed on <br/>" + tempDoc[0].date.toDate() + "<br/> <br/> Bring this Code to Nearest Retailer to get your Gas Cylinder", tempDoc[0].id)
+                showQR(
+                  "Your order Placed on <br/>" +
+                    tempDoc[0].date.toDate() +
+                    "<br/> <br/> Bring this Code to Nearest Retailer to get your Gas Cylinder",
+                  tempDoc[0].id
+                );
               }
             });
         });
