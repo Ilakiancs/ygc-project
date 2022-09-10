@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Client Sign In</title>
+
+    <link rel="stylesheet" href="./assets/css/order.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="assets/js/qrcode.js"></script>
+  </head>
+  <body>
+    <div class="container contact-form">
+      <div class="contact-image">
+        <img
+          src="https://image.ibb.co/kUagtU/rocket_contact.png"
+          alt="rocket_contact"
+        />
+      </div>
+      <div id="form">
+        <h3>Get Your Gas Cylinder</h3>
+
+        <div class="d-flex justify-content-center">
+          <button id="orderBtn" class="btn btn-primary btn-lg px-5">
+            Order Now
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyD7RKFOV4Mk_O2Nm9Vpv7sEAUc89iKHmeE",
+        authDomain: "gcylinder-d807a.firebaseapp.com",
+        projectId: "gcylinder-d807a",
+        storageBucket: "gcylinder-d807a.appspot.com",
+        messagingSenderId: "460628927682",
+        appId: "1:460628927682:web:a5bd53ffb382fd082c475b",
+        measurementId: "G-PDKWCKS2CF",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const orderDatabase = firebase.firestore().collection("orders");
+      const username = localStorage.getItem("username");
+      console.log(username);
+
+      function displayAlert(message) {
+        console.log(message);
+      }
+
+      function showQR(title, ID) {
+          document.getElementById("form").innerHTML = "<h3>" + title + "</h3><div class=\"d-flex justify-content-center\" id=\"qrcode\"></div>";
+          new QRCode(document.getElementById("qrcode"), ID);
+      }
+
+      document
+        .getElementById("orderBtn")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          orderDatabase
+            .where("username", "==", username)
+            .limit(1)
+            .get()
+            .then((querySnapshot) => {
+              const tempDoc = querySnapshot.docs.map((doc) => {
+                return { id: doc.id, sold: doc.data()["sold"], date: doc.data()["date"] };
+              });
+              if (tempDoc.length == 0) {
+                displayAlert("create");
+              } else {
+                showQR("Your order Placed on <br/>" + tempDoc[0].date.toDate() + "<br/> <br/> Bring this Code to Nearest Retailer to get your Gas Cylinder", tempDoc[0].id)
+              }
+            });
+        });
+
+      window.onload = function () {
+        if (!username) {
+          location.replace("./customer/signin.html");
+        }
+      };
+    </script>
+  </body>
+</html>
