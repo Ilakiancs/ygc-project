@@ -73,7 +73,7 @@
                 placeholder="Re-Enter Password"
               />
             </div>
-            <button class="btn" onclick="createUser()">Sign Up</button>
+            <button class="btn" id="signUpBtn">Sign Up</button>
           </form>
         </div>
       </div>
@@ -103,6 +103,7 @@
         </div>
       </div>
     </div>
+    <div id="snackbar">Some text some message..</div>
     <script src="../assets/js/custSignIn.js"></script>
     <script>
       const firebaseConfig = {
@@ -120,6 +121,17 @@
       const userDatabase = firebase.firestore().collection("customers");
 
       function displayAlert(message) {
+        var x = document.getElementById("snackbar");
+        x.innerHTML = message;
+        x.className = "show";
+        setTimeout(function () {
+          x.className = x.className.replace("show", "");
+        }, 3000);
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function () {
+          x.className = x.className.replace("show", "");
+        }, 3000);
         console.log(message);
       }
 
@@ -127,59 +139,70 @@
         const re = /^[a-zA-Z0-9]+$/;
         return re.test(username);
       }
-      function createUser() {
-        var username = $("#signUpUsername").val().toLowerCase();
-        var phone = $("#signUpPhone").val();
-        var frc = $("#signUpFrc").val();
-        var password = $("#signUpPassword").val();
-        var confirmPassword = $("#signUpPasswordConfirm").val();
-        var passwordCheck = password.length < 7;
-        var confirmPasswordCheck = password !== confirmPassword;
 
-        if (username == "") {
-          displayAlert(
-            "Enter a Valid Username. Username can only contain a-z, A-Z, 0-9, . and _."
-          );
-          return;
-        }
-        userDatabase
-          .doc(username)
-          .get()
-          .then(function (doc) {
-            if (!validateUsername(username)) {
-              displayAlert(
-                "Enter a Valid Username. Username can only contain a-z, A-Z, 0-9, . and _."
-              );
-              return;
-            }
-            if (doc.exists) {
-              displayAlert("Username exist");
-              return;
-            }
-            if (passwordCheck) {
-              displayAlert(
-                "Password Length should be greater than 8 characters"
-              );
-              return;
-            }
-            if (confirmPasswordCheck) {
-              displayAlert("Password doesn't match");
-              return;
-            }
+      document
+        .getElementById("signUpBtn")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          var username = $("#signUpUsername").val().toLowerCase();
+          var phone = $("#signUpPhone").val();
+          var frc = $("#signUpFrc").val();
+          var password = $("#signUpPassword").val();
+          var confirmPassword = $("#signUpPasswordConfirm").val();
+          var passwordCheck = password.length < 7;
+          var confirmPasswordCheck = password !== confirmPassword;
 
-            userDatabase
-              .doc(username.toLowerCase())
-              .set({
-                username: username,
-                password: window.btoa(password),
-                frc: frc,
-                phone: phone,
-              })
-              .then(function () {
-                console.log("Signed Up");
-              });
-          });
-      }
+          if (username == "") {
+            displayAlert(
+              "Enter a Valid Username. Username can only contain a-z, A-Z, 0-9, . and _."
+            );
+            return;
+          }
+          if (phone == "") {
+            displayAlert("Enter a Phone Number");
+            return;
+          }
+          if (frc == "") {
+            displayAlert("Enter an FRC Number");
+            return;
+          }
+          if (passwordCheck) {
+            displayAlert("Password Length should be greater than 8 characters");
+            return;
+          }
+          if (confirmPasswordCheck) {
+            displayAlert("Password doesn't match");
+            return;
+          }
+
+          userDatabase
+            .doc(username)
+            .get()
+            .then(function (doc) {
+              if (!validateUsername(username)) {
+                displayAlert(
+                  "Enter a Valid Username. Username can only contain a-z, A-Z, 0-9, . and _."
+                );
+                return;
+              }
+              if (doc.exists) {
+                displayAlert("Username exist");
+                return;
+              }
+
+              userDatabase
+                .doc(username.toLowerCase())
+                .set({
+                  username: username,
+                  password: window.btoa(password),
+                  frc: frc,
+                  phone: phone,
+                })
+                .then(function () {
+                  console.log("Signed Up");
+                });
+            });
+        });
       document
         .getElementById("signInBtn")
         .addEventListener("click", function (event) {
